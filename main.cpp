@@ -31,14 +31,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
     wc.hInstance     = hInst;
     wc.hCursor       = LoadCursor(NULL, IDC_CROSS);
     wc.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
-    wc.lpszClassName = _T("PaintApp");
+    wc.lpszClassName = _T("Canaria32_AI_C");
     wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
     wc.hIconSm       = LoadIcon(NULL, IDI_APPLICATION);
     if (!RegisterClassEx(&wc)) return 1;
 
     HMENU hMenu = CreateAppMenu();
     g_hwnd = CreateWindowEx(
-        0, _T("PaintApp"), _T("ペイント - 新規"),
+        0, _T("Canaria32_AI_C"), _T("Canaria32_AI_C - 新規"),
         WS_OVERLAPPEDWINDOW | WS_HSCROLL | WS_VSCROLL,
         CW_USEDEFAULT, CW_USEDEFAULT, 960, 720,
         NULL, hMenu, hInst, NULL);
