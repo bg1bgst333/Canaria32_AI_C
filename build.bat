@@ -11,7 +11,7 @@
 
 set SRC=main.cpp Canvas.cpp FileIO.cpp UI.cpp WndProc.cpp
 set OUT=Canaria32_AI_C.exe
-set CFLAGS=/nologo /W3 /O2 /MT /EHsc
+set CFLAGS=/nologo /W3 /O2 /MT /EHsc /utf-8
 set LFLAGS=/subsystem:windows /entry:WinMainCRTStartup
 set LIBS=user32.lib gdi32.lib comdlg32.lib
 
