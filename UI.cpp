@@ -58,7 +58,7 @@ BOOL DoSaveAs(HWND hwnd)
     lstrcpyn(g_app.filePath, path, MAX_PATH);
     g_app.modified = FALSE;
     TCHAR title[MAX_PATH + 32];
-    wsprintf(title, _T("ペイント - %s"), path);
+    wsprintf(title, _T("Canaria32_AI_C - %s"), path);
     SetWindowText(hwnd, title);
     return TRUE;
 }
@@ -69,10 +69,10 @@ BOOL DoSaveAs(HWND hwnd)
 void UpdateTitle(HWND hwnd)
 {
     if (g_app.filePath[0] == _T('\0')) {
-        SetWindowText(hwnd, _T("ペイント - 新規"));
+        SetWindowText(hwnd, _T("Canaria32_AI_C - 新規"));
     } else {
         TCHAR title[MAX_PATH + 32];
-        wsprintf(title, _T("ペイント - %s"), g_app.filePath);
+        wsprintf(title, _T("Canaria32_AI_C - %s"), g_app.filePath);
         SetWindowText(hwnd, title);
     }
 }
