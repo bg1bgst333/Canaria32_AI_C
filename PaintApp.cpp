@@ -357,10 +357,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     // ------------------------------------------------------------
+    case WM_ERASEBKGND:
+        return 1;   // 背景消去を抑制 (ちらつき防止)
+
     case WM_SIZE:
         ClampScroll(hwnd);
         UpdateScrollbars(hwnd);
-        InvalidateRect(hwnd, NULL, TRUE);
+        InvalidateRect(hwnd, NULL, FALSE);
         return 0;
 
     // ------------------------------------------------------------
@@ -371,12 +374,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         RECT rc;
         GetClientRect(hwnd, &rc);
 
-        // キャンバス外の余白をグレーで塗る
-        FillRect(hdc, &rc, (HBRUSH)(COLOR_APPWORKSPACE + 1));
+        // オフスクリーンバッファに合成してから一気に転送 (ダブルバッファ)
+        HDC     hBufDC  = CreateCompatibleDC(hdc);
+        HBITMAP hBufBmp = CreateCompatibleBitmap(hdc, rc.right, rc.bottom);
+        HBITMAP hBufOld = (HBITMAP)SelectObject(hBufDC, hBufBmp);
+
+        // 背景 (グレー)
+        FillRect(hBufDC, &rc, (HBRUSH)(COLOR_APPWORKSPACE + 1));
 
         if (g_app.hBitmap) {
-            HDC hMemDC = CreateCompatibleDC(hdc);
-            HBITMAP hOld = (HBITMAP)SelectObject(hMemDC, g_app.hBitmap);
+            HDC hCanvasDC = CreateCompatibleDC(hdc);
+            HBITMAP hOld  = (HBITMAP)SelectObject(hCanvasDC, g_app.hBitmap);
 
             int srcX  = g_app.scrollX;
             int srcY  = g_app.scrollY;
@@ -386,11 +394,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if (drawH > rc.bottom) drawH = rc.bottom;
 
             if (drawW > 0 && drawH > 0)
-                BitBlt(hdc, 0, 0, drawW, drawH, hMemDC, srcX, srcY, SRCCOPY);
+                BitBlt(hBufDC, 0, 0, drawW, drawH, hCanvasDC, srcX, srcY, SRCCOPY);
 
-            SelectObject(hMemDC, hOld);
-            DeleteDC(hMemDC);
+            SelectObject(hCanvasDC, hOld);
+            DeleteDC(hCanvasDC);
         }
+
+        // バッファを画面に一括転送
+        BitBlt(hdc, 0, 0, rc.right, rc.bottom, hBufDC, 0, 0, SRCCOPY);
+
+        SelectObject(hBufDC, hBufOld);
+        DeleteObject(hBufBmp);
+        DeleteDC(hBufDC);
+
         EndPaint(hwnd, &ps);
         return 0;
     }
