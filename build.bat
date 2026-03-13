@@ -9,7 +9,7 @@
 ::   3) 成功すると PaintApp.exe が生成される
 :: ============================================================
 
-set SRC=PaintApp.cpp
+set SRC=main.cpp Canvas.cpp FileIO.cpp UI.cpp WndProc.cpp
 set OUT=PaintApp.exe
 set CFLAGS=/nologo /W3 /O2 /MT /EHsc
 set LFLAGS=/subsystem:windows /entry:WinMainCRTStartup
