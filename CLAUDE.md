@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Status
 
-This repository (`WebAIClaudeCode1`) is newly initialized and contains no source code yet. The branching model uses `master` as the main branch and `develop` for active development.
+This repository (`Canaria32_AI_C`) is newly initialized and contains no source code yet. The branching model uses `master` as the main branch and `develop` for active development.
 
 When the project is established, update this file with:
 - Build, lint, and test commands
